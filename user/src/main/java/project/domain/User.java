@@ -29,16 +29,6 @@ public class User {
 
     @PostPersist
     public void onPostPersist() {
-        UserRegistered userRegistered = new UserRegistered(this);
-        userRegistered.publishAfterCommit();
-
-        UserLoggedIn userLoggedIn = new UserLoggedIn(this);
-        userLoggedIn.publishAfterCommit();
-
-        SubscriptionCanceled subscriptionCanceled = new SubscriptionCanceled(
-            this
-        );
-        subscriptionCanceled.publishAfterCommit();
     }
 
     public static UserRepository repository() {
