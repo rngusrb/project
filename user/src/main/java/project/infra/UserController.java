@@ -1,5 +1,8 @@
 package project.infra;
+import java.util.Map;
+import java.util.HashMap;
 
+import java.util.HashMap;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,11 +75,24 @@ public class UserController {
     }
 
     @PostMapping("/users/{userId}/access")
-    public void accessBook(@PathVariable Long userId, @RequestBody BookAccessRequest request) throws Exception {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
+    public Map<String, Object> accessBook(
+            @PathVariable Long userId,
+            @RequestBody BookAccessRequest request) throws Exception {
 
-        user.checkBookAccess(request.getBookId());
-    }    
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
+
+        String bookId = request.getBookId();
+        boolean pass = Boolean.TRUE.equals(user.getPass());
+
+        user.checkBookAccess(bookId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", userId);
+        response.put("bookId", bookId);
+        response.put("access", pass ? "GRANTED" : "DENIED");
+
+        return response;
+    } 
 }
 //>>> Clean Arch / Inbound Adaptor
