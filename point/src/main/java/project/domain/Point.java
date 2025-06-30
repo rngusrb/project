@@ -20,6 +20,9 @@ import project.domain.PointUpdated;
 public class Point {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
+
     private Long userId;
 
     private Date changeDate;
@@ -35,52 +38,64 @@ public class Point {
     }
 
     // 포인트 차감: 도서 접근 거부 시
-    public static void pointBalanceChange(BookAccessDenied bookAccessDenied) {
+public static void pointBalanceChange(BookAccessDenied bookAccessDenied) {
+    Long userId = bookAccessDenied.getUserId();
+    Long bookId = bookAccessDenied.getBookId();
+    int requiredPoint = 500;
+
+    // 가장 최근 포인트 합계 조회
+    Long currentSum = 0L;
+    Point latest = repository().findLatestByUserId(userId); // native 쿼리 기준
+    if (latest != null) {
+        currentSum = latest.getPointSum();
+    }
+
+    // 차감 가능할 경우
+    if (currentSum >= requiredPoint) {
         Point point = new Point();
-        point.setUserId(bookAccessDenied.getUserId());
+        point.setUserId(userId);
         point.setChangeDate(new Date());
-        point.setChangePoint(-bookAccessDenied.getRequiredPoint());
-
-        // 기존 포인트 조회 후 누적 계산
-        Long currentSum = repository().findById(bookAccessDenied.getUserId())
-            .map(Point::getPointSum)
-            .orElse(0L);
-
-        point.setPointSum(currentSum - bookAccessDenied.getRequiredPoint());
-        point.setReason(bookAccessDenied.getReason() != null ? bookAccessDenied.getReason() : "Access Denied");
+        point.setChangePoint(-requiredPoint);
+        point.setPointSum(currentSum - requiredPoint);
+        point.setReason("책 접근 시 포인트 차감");
 
         repository().save(point);
 
-        PointUpdated pointMinus = new PointUpdated(point);
+        PointMinus pointMinus = new PointMinus(userId, bookId);
         pointMinus.publishAfterCommit();
+
+    } else {
+        System.out.println("포인트 부족: userId=" + userId + ", 현재 잔액=" + currentSum);
+        // PointNotEnough 이벤트 발행 같은 것도 여기에 작성 가능
+    }
+}
+public static void pointBalanceChange(UserRegistered userRegistered) {
+    Long userId = userRegistered.getUserId();
+
+    // 지급할 포인트 설정
+    int grantPoint = 1000;
+    // if ("kt".equalsIgnoreCase(userRegistered.getUserType())) {
+    //     grantPoint = 5000;
+    // }
+
+    // 현재 누적 포인트 조회 (최신 1건)
+    Long currentSum = 0L;
+    Point latest = repository().findLatestByUserId(userId);
+    if (latest != null) {
+        currentSum = latest.getPointSum();
     }
 
-    // 포인트 지급: 신규가입
-    public static void pointBalanceChange(UserRegistered userRegistered) {
-        Point point = new Point();
-        point.setUserId(userRegistered.getUserId());
-        point.setChangeDate(new Date());
+    // 새 포인트 로그 생성
+    Point point = new Point();
+    point.setUserId(userId);
+    point.setChangeDate(new Date());
+    point.setChangePoint(grantPoint);
+    point.setPointSum(currentSum + grantPoint);
+    point.setReason("Welcome Bonus");
 
-        // 일반 신규회원은 1000포인트 지급!
-        int grantPoint = 1000;
-        // kt 직원이면 5000 포인트 지급 !
-        //if ("kt".equalsIgnoreCase(userRegistered.getUserType())) {
-        //    grantPoint = 5000;
-        //}
+    repository().save(point);
 
-        point.setChangePoint(grantPoint);
-
-        // 기존 포인트 누적
-        Long currentSum = repository().findById(userRegistered.getUserId())
-            .map(Point::getPointSum)
-            .orElse(0L);
-
-        point.setPointSum(currentSum + grantPoint);
-        point.setReason("Welcome Bonus");
-
-        repository().save(point);
-
-        PointUpdated pointMinus = new PointUpdated(point);
-        pointMinus.publishAfterCommit();
-    }
+    PointUpdated pointGranted = new PointUpdated(point);
+    pointGranted.publishAfterCommit();
+}
 }

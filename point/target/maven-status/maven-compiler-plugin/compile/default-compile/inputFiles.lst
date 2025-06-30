@@ -7,6 +7,7 @@
 /workspace/project/point/src/main/java/project/domain/PointUsageHistory.java
 /workspace/project/point/src/main/java/project/PointApplication.java
 /workspace/project/point/src/main/java/project/domain/UserRegistered.java
+/workspace/project/point/src/main/java/project/domain/PointMinus.java
 /workspace/project/point/src/main/java/project/infra/PointUsageHistoryViewHandler.java
 /workspace/project/point/src/main/java/project/infra/PointHateoasProcessor.java
 /workspace/project/point/src/main/java/project/infra/PolicyHandler.java

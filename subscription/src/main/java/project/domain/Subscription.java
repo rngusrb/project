@@ -19,6 +19,9 @@ import project.domain.SubscriptionOwned;
 public class Subscription {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
+    
     private Long userId;
 
     private Long bookId;

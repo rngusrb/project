@@ -38,5 +38,22 @@ public class PolicyHandler {
         subscription.setBookId(granted.getBookId());
         subscriptionRepository.save(subscription);
     }
+
+    @StreamListener(
+        value = KafkaProcessor.INPUT,
+        condition = "headers['type']=='PointMinus'"
+    )
+    public void wheneverBookAccessGranted_AddSubscription(
+        @Payload PointMinus granted
+    ) {
+        System.out.println("\n\n✅ PointMinus received: " + granted + "\n\n");
+
+        Subscription subscription = new Subscription();
+        subscription.setUserId(granted.getUserId());
+        subscription.setBookId(granted.getBookId());
+        subscriptionRepository.save(subscription);
+    }
+
+    
 }
 //>>> Clean Arch / Inbound Adaptor
