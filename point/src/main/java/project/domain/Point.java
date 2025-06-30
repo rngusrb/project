@@ -98,4 +98,5 @@ public static void pointBalanceChange(UserRegistered userRegistered) {
     PointUpdated pointGranted = new PointUpdated(point);
     pointGranted.publishAfterCommit();
 }
+
 }

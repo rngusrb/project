@@ -2,6 +2,7 @@
 /workspace/project/point/src/main/java/project/domain/PointUpdated.java
 /workspace/project/point/src/main/java/project/domain/Point.java
 /workspace/project/point/src/main/java/project/infra/PointController.java
+/workspace/project/point/src/main/java/project/domain/PointChargeRequest.java
 /workspace/project/point/src/main/java/project/infra/AbstractEvent.java
 /workspace/project/point/src/main/java/project/domain/PointRepository.java
 /workspace/project/point/src/main/java/project/domain/PointUsageHistory.java
