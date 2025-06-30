@@ -10,8 +10,11 @@ import project.infra.AbstractEvent;
 @Data
 @ToString
 public class SubscriptionRequested extends AbstractEvent {
-
     private Long id;
+
+    public SubscriptionRequested(User aggregate) {
+        super(aggregate);
+    }
 
     public SubscriptionRequested() {
         super();

@@ -1,4 +1,5 @@
 package project.domain;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -20,12 +21,10 @@ import project.domain.UserRegistered;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     private Long userPw;
-
-    private Long point;
+    private Boolean pass;
 
     @PostPersist
     public void onPostPersist() {
@@ -39,30 +38,36 @@ public class User {
     }
 
     //<<< Clean Arch / Port Method
-    public void reqeustLogin() {
-        //implement business logic here:
+    public void login(Long inputPw) {
+        if (!Objects.equals(this.userPw, inputPw)) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
+        UserLoggedIn event = new UserLoggedIn(this);
+        event.publishAfterCommit();
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public void requestUserRegistration() {
-        //implement business logic here:
-
+        UserRegistered userRegistered = new UserRegistered(this);
+        userRegistered.publishAfterCommit();
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public void requestSubscription() {
-        //implement business logic here:
-
+        this.pass = true;
+        SubscriptionRequested event = new SubscriptionRequested(this);
+        event.publishAfterCommit();
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public void cancelSubscription() {
-        //implement business logic here:
-
+        this.pass = false;
+        SubscriptionCanceled event = new SubscriptionCanceled(this);
+        event.publishAfterCommit();
     }
     //>>> Clean Arch / Port Method
 
