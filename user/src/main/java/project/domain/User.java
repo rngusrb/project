@@ -71,5 +71,15 @@ public class User {
     }
     //>>> Clean Arch / Port Method
 
+    public void checkBookAccess(String bookId) {
+        if (Boolean.TRUE.equals(this.pass)) {
+            BookAccessGranted event = new BookAccessGranted(this.getUserId(), bookId);
+            event.publishAfterCommit();
+        } else {
+            BookAccessDenied event = new BookAccessDenied(this.getUserId(), bookId);
+            event.publishAfterCommit();
+        }
+    }    
+
 }
 //>>> DDD / Aggregate Root

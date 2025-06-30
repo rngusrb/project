@@ -70,5 +70,13 @@ public class UserController {
         userRepository.save(user);
         return user;
     }
+
+    @PostMapping("/users/{userId}/access")
+    public void accessBook(@PathVariable Long userId, @RequestBody BookAccessRequest request) throws Exception {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
+
+        user.checkBookAccess(request.getBookId());
+    }    
 }
 //>>> Clean Arch / Inbound Adaptor
