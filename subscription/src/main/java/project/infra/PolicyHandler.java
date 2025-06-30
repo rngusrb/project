@@ -23,36 +23,20 @@ public class PolicyHandler {
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString) {}
 
-    @StreamListener(
-        value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='BookViewed'"
-    )
-    public void wheneverBookViewed_SubscriptionCheck(
-        @Payload BookViewed bookViewed
-    ) {
-        BookViewed event = bookViewed;
-        System.out.println(
-            "\n\n##### listener SubscriptionCheck : " + bookViewed + "\n\n"
-        );
-
-        // Sample Logic //
-        Subscription.subscriptionCheck(event);
-    }
 
     @StreamListener(
         value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='PointUpdated'"
+        condition = "headers['type']=='BookAccessGranted'"
     )
-    public void wheneverPointUpdated_SubscriptionAdd(
-        @Payload PointUpdated pointUpdated
+    public void wheneverBookAccessGranted_AddSubscription(
+        @Payload BookAccessGranted granted
     ) {
-        PointUpdated event = pointUpdated;
-        System.out.println(
-            "\n\n##### listener SubscriptionAdd : " + pointUpdated + "\n\n"
-        );
+        System.out.println("\n\n✅ BookAccessGranted received: " + granted + "\n\n");
 
-        // Sample Logic //
-        Subscription.subscriptionAdd(event);
+        Subscription subscription = new Subscription();
+        subscription.setUserId(granted.getUserId());
+        subscription.setBookId(granted.getBookId());
+        subscriptionRepository.save(subscription);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

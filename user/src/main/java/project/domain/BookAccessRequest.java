@@ -6,5 +6,5 @@ import lombok.Data;
 
 @Data
 public class BookAccessRequest {
-    private String bookId;
+    private Long bookId;
 }

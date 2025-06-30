@@ -82,10 +82,10 @@ public class UserController {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."));
 
-        String bookId = request.getBookId();
+        Long bookId = request.getBookId(); // 수정됨
         boolean pass = Boolean.TRUE.equals(user.getPass());
 
-        user.checkBookAccess(bookId);
+        user.checkBookAccess(bookId); // 수정됨
 
         Map<String, Object> response = new HashMap<>();
         response.put("userId", userId);
@@ -93,6 +93,6 @@ public class UserController {
         response.put("access", pass ? "GRANTED" : "DENIED");
 
         return response;
-    } 
+    }
 }
 //>>> Clean Arch / Inbound Adaptor

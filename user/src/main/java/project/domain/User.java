@@ -71,7 +71,7 @@ public class User {
     }
     //>>> Clean Arch / Port Method
 
-    public void checkBookAccess(String bookId) {
+    public void checkBookAccess(Long bookId) {
         if (Boolean.TRUE.equals(this.pass)) {
             BookAccessGranted event = new BookAccessGranted(this.getUserId(), bookId);
             event.publishAfterCommit();

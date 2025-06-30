@@ -11,9 +11,9 @@ import project.infra.AbstractEvent;
 @ToString
 public class BookAccessDenied extends AbstractEvent {
     private Long userId;
-    private String bookId;
+    private Long bookId;
 
-    public BookAccessDenied(Long userId, String bookId) {
+    public BookAccessDenied(Long userId, Long bookId) {
         super();
         this.userId = userId;
         this.bookId = bookId;
