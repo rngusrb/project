@@ -1,0 +1,14 @@
+/workspace/project/point/src/main/java/project/domain/BookAccessDenied.java
+/workspace/project/point/src/main/java/project/domain/PointUpdated.java
+/workspace/project/point/src/main/java/project/domain/Point.java
+/workspace/project/point/src/main/java/project/infra/PointController.java
+/workspace/project/point/src/main/java/project/infra/AbstractEvent.java
+/workspace/project/point/src/main/java/project/domain/PointRepository.java
+/workspace/project/point/src/main/java/project/domain/PointUsageHistory.java
+/workspace/project/point/src/main/java/project/PointApplication.java
+/workspace/project/point/src/main/java/project/domain/UserRegistered.java
+/workspace/project/point/src/main/java/project/infra/PointUsageHistoryViewHandler.java
+/workspace/project/point/src/main/java/project/infra/PointHateoasProcessor.java
+/workspace/project/point/src/main/java/project/infra/PolicyHandler.java
+/workspace/project/point/src/main/java/project/infra/PointUsageHistoryRepository.java
+/workspace/project/point/src/main/java/project/config/kafka/KafkaProcessor.java

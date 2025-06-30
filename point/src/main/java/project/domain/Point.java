@@ -16,10 +16,10 @@ import project.domain.PointUpdated;
 
 @Entity
 @Table(name = "Point_table")
+@Data
 public class Point {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     private Date changeDate;
@@ -64,9 +64,9 @@ public class Point {
         // 일반 신규회원은 1000포인트 지급!
         int grantPoint = 1000;
         // kt 직원이면 5000 포인트 지급 !
-        if ("kt".equalsIgnoreCase(userRegistered.getUserType())) {
-            grantPoint = 5000;
-        }
+        //if ("kt".equalsIgnoreCase(userRegistered.getUserType())) {
+        //    grantPoint = 5000;
+        //}
 
         point.setChangePoint(grantPoint);
 

@@ -13,16 +13,16 @@ public class UserRegistered extends AbstractEvent {
     // 유저 아이디
     private Long userId;
     // 가입 유형
-    private String userType;
+    //private String userType;
 
     public UserRegistered() {
          super();
      }
 
-     public UserRegistered(Long id,String userType) {
+     public UserRegistered(Long id) {
          super();
 
          this.userId = id;
-         this.userType= userType;
+         //this.userType= userType;
      }
 }
